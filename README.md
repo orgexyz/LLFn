@@ -10,7 +10,6 @@ import os
 from llfn import prompt_function, global_bind
 from langchain.chat_models import ChatOpenAI
 
-
 @prompt_function
 def translate(text: str, to_language: str) -> str:
     return f"""
@@ -20,16 +19,14 @@ You must automatically detect the language of the following text and tranlate it
 ```
 """
 
-
 @prompt_function
 def summarize(text: str, length: int) -> str:
     return f"""
 You must summarize the following text to a smaller text approximately {length} words long
 ```
 {text}
-````
+```
 """
-
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
