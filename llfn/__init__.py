@@ -1,3 +1,3 @@
-from .llfn import prompt_function
+from .llfn import prompt_function, global_bind
 
-__all__ = ["prompt_function"]
+__all__ = ["prompt_function", "global_bind"]
