@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "llfn"
+version = "0.1.0"
+description = ""
+authors = ["Sorawit Suriyakarn <thepsint@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.8.1,<4.0"
+langchain = "^0.0.235"
+python-dotenv = "^1.0.0"
+openai = "^0.27.8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
