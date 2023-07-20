@@ -1,7 +1,49 @@
 import json
-from functools import update_wrapper, wraps
-from langchain.chat_models import ChatOpenAI
+from functools import update_wrapper
 from langchain.schema import HumanMessage, SystemMessage
+from pydantic import BaseModel, Field
+
+
+class LLFnFunc:
+    def __init__(self, app, func):
+        self.app = app
+        self.func = func
+        self.llm = None
+
+        class Result(BaseModel):
+            result: func.__annotations__["return"] = Field(
+                ..., description="The result of the instruction"
+            )
+
+        self.result_type = Result
+        update_wrapper(self, func)
+
+    def bind(self, llm):
+        self.llm = llm
+
+    def __call__(self, *args, **kwargs):
+        if self.llm is not None:
+            llm = self.llm
+        elif self.app.llm is not None:
+            llm = self.app.llm
+        else:
+            raise ValueError(
+                f'You must call "bind" before calling "{self.func.__name__}"'
+            )
+        prompt = self.func(*args, **kwargs)
+        output = llm.predict_messages(
+            [
+                SystemMessage(
+                    content=f"""
+- You MUST process the user's command and produce exactly one result without any other contexts or explanations
+- Your output must be a JSON dump of a Pydantic object of schema: {self.result_type.schema()}
+- Output format is EXTREMELY important. Make sure it's a valid JSON dump of the Pydantic object
+"""
+                ),
+                HumanMessage(content=prompt),
+            ]
+        )
+        return self.result_type.parse_raw(output.content).result
 
 
 class LLFn:
@@ -11,30 +53,5 @@ class LLFn:
     def bind(self, llm):
         self.llm = llm
 
-    def __call__(self, f):
-        @wraps(f)
-        def wrapper(*args, **kwargs):
-            prompt = f(*args, **kwargs)
-            if self.llm is None:
-                raise ValueError(
-                    "You must call global_bind before calling prompt_function"
-                )
-            output = self.llm.predict_messages(
-                [
-                    SystemMessage(
-                        content=f"""
-- You must execute the user command and convert it to exactly one single output. Let's call it X
-- X MUST have Python type of `{f.__annotations__['return']}`
-- You then MUST output the JSON of X using Python's `json.dumps`
-- Executing `json.loads` on the output of your function MUST give exactly X
-- You MUST NOT output anything else. No need to provide output context
-
-- For example, if type is `str` you can output `"Hello"` BUT NOT `{{"result": "Hello"}}`
-"""
-                    ),
-                    HumanMessage(content=prompt),
-                ]
-            )
-            return json.loads(output.content)
-
-        return wrapper
+    def __call__(self, func):
+        return LLFnFunc(self, func)
