@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "llfn"
-version = "0.1.2"
+version = "0.1.3"
 description = ""
 authors = ["Sorawit Suriyakarn <thepsint@gmail.com>"]
 readme = "README.md"
