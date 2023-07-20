@@ -124,15 +124,13 @@ print(translate("Hello welcome. How are you?", "Thai"))
 </p>
 </details>
 
-## Requirements
-
-- Python >= 3.9
-- Poetry >= x.xx
-
 ## Installation
 
-```
-poetry ...
+LLFn is available on [PyPi](https://pypi.org/project/llfn/). You can install LLFn using your favorite Python package management software.
+
+```sh
+$ pip install llfn # If you use pip
+$ poetry add llfn # If you use poetry
 ```
 
 ## Advanced Features
@@ -263,7 +261,7 @@ If you wish to cite LLFn in your research, we encourage the use of [CITATION.cff
 
 ## License
 
-LLFn is an open-source software under the **MIT license**. This license allows use, modification, and distribution of the software. For complete details, please see the [LICENSE](LICENSE) and [NOTICE](NOTICE) files in this repository.
+LLFn is an open-source software under the **MIT license**. This license allows use, modification, and distribution of the software. For complete details, please see the [LICENSE](LICENSE) file in this repository.
 
 ## Acknowledgements
 
