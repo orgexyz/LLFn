@@ -1,7 +1,10 @@
 import dotenv
 import os
-from llfn import prompt_function, global_bind
+from llfn import LLFn
 from langchain.chat_models import ChatOpenAI
+
+
+prompt_function = LLFn()
 
 
 @prompt_function
@@ -31,6 +34,6 @@ if __name__ == "__main__":
         model=os.getenv("OPENAI_MODEL"),
         openai_api_key=os.getenv("OPENAI_API_KEY"),
     )  # type: ignore
-    global_bind(llm)
+    prompt_function.bind(llm)
     print(translate("สวัสดีตอนเช้าครับ อยากรับประทานอะไรดีครับเช้าวันนี้", "english"))
     print(summarize("I love my dogs. They are corgis. They love nuggets", 4))
