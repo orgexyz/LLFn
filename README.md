@@ -20,8 +20,8 @@
         <a href="https://github.com/orgexyz/LLFn/issues">
           <img src="https://img.shields.io/github/issues/orgexyz/LLFn.svg?style=for-the-badge" />
         </a>
-        <a href="https://github.com/orgexyz/LLFn/blob/master/LICENSE.txt">
-          <img src="https://img.shields.io/github/license/orgexyz/LLFn.svg?style=for-the-badge" />
+        <a href="https://github.com/orgexyz/LLFn/blob/master/LICENSE">
+          <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" />
         </a>
     </div>
     <br />
