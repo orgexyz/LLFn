@@ -88,8 +88,9 @@ function_prompt.bind(llm)
 ### 🍺 Calling the Function
 Now you can call your function like you would for any Python function.
 
-```
+```python
 translate("Hello welcome. How are you?", "Thai")
+# สวัสดี ยินดีต้อนรับ สบายดีไหม?
 ```
 
 The beauty of this construct is that you're able to infinitely compose your applications. LLFn does not make any assumption on how you'd chain up your application logic. The only requirement for a `function_prompt` is that it returns a prompt string at the end.
