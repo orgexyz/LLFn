@@ -14,7 +14,7 @@ def translate(text: str, output_language: str) -> str:
 llm = ChatOpenAI(
     temperature=0.7,
     openai_api_key=os.getenv("OPENAI_API_KEY"),
-    model=os.getenv("OPENAI_MODEL"),
+    model="gpt-3.5-turbo",
 )  # type: ignore
 
 function_prompt.bind(llm)

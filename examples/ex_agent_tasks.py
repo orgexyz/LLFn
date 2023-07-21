@@ -23,7 +23,7 @@ def agent_think(goal: str) -> AgentLogicOutput:
 llm = ChatOpenAI(
     temperature=0.7,
     openai_api_key=os.getenv("OPENAI_API_KEY"),
-    model=os.getenv("OPENAI_MODEL"),
+    model="gpt-3.5-turbo",
 )  # type: ignore
 
 
