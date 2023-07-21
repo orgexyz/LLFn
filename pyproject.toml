@@ -1,8 +1,11 @@
 [tool.poetry]
 name = "llfn"
-version = "0.1.3"
-description = ""
-authors = ["Sorawit Suriyakarn <thepsint@gmail.com>"]
+version = "0.1.4"
+description = "Build anything from a simple text-summarizer to complex AI agents with one common primitive: function"
+authors = [
+    "Sorawit Suriyakarn <thepsint@gmail.com>",
+    "Paul Nattapatsiri <paul@bandprotocol.com>",
+]
 readme = "README.md"
 
 [tool.poetry.dependencies]
