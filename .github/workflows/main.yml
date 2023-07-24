@@ -23,7 +23,5 @@ jobs:
           restore-keys: ${{ runner.os }}-poetry
       - name: Install dependencies
         run: poetry install
-      - name: Add CNAME to site
-        run: echo 'llfn.orge.xyz' > site/CNAME  # Replace with your domain
       - name: Build and Deploy
         run: poetry run mkdocs gh-deploy
