@@ -1,4 +1,4 @@
-name: Deploy MkDocs
+name: Deploy MkDocs to https://llfn.orge.xyz
 
 on:
   push:
@@ -9,9 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Deploy MkDocs
-      uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
+    - uses: actions/checkout@v3
+    - uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         CUSTOM_DOMAIN: llfn.orge.xyz
