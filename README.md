@@ -232,11 +232,21 @@ llm = ChatOpenAI(
 function_prompt.bind(llm)
 ```
 
-### 
-
 ## Examples
 
-_Coming soon_
+### ⭐️ Single-Prompt Examples
+
+| **Task** | **Showcase** |
+|----------|--------------|
+| [Machine Translation](/examples/ex_translate_chat_model.py) | Using LangChain Chat Model |
+| [Machine Translation](/examples/ex_translate_llm.py)  | Using LangChain LLM Model |
+| [Agent Task Planner](/examples/ex_agent_tasks.py) | Defining Structured Output |
+
+### 🌈 Multi-Prompt Complex Examples
+
+| **Task** | **Showcase** |
+|----------|--------------|
+| [BabyAGI](/examples/ex_babyagi.ipynb) | Implementing BabyAGI with LLFn |
 
 ## Sponsors and Contributors
 
