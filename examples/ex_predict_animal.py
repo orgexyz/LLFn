@@ -18,8 +18,8 @@ def predict_animal(text: str) -> str:
     return f"What animal fits the following description the best: {text}"
 
 
-predict_animal.train("It has four legs and barks")("obviously a dog")
-predict_animal.train("It has four legs and meows")("obviously a cat")
+predict_animal.expect("It has four legs and barks")("obviously a dog")
+predict_animal.expect("It has four legs and meows")("obviously a cat")
 
 function_prompt.bind(llm)
 print(predict_animal("It has two legs and flies"))  # obviously a bird

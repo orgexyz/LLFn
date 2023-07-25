@@ -24,7 +24,7 @@ class LLFnFunc:
     def bind(self, llm):
         self.llm = llm
 
-    def train(self, *args, **kwargs):
+    def expect(self, *args, **kwargs):
         def wrapper(inner_result):
             prompt = self.func(*args, **kwargs)
             expected_result = self.result_type(result=inner_result)
