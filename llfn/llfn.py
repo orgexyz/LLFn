@@ -45,7 +45,7 @@ class LLFnFunc:
         system_prompt = f"""
 - You MUST process the user's command and produce exactly one result without any other contexts or explanations
 - Your output must be a JSON dump of a Pydantic object of schema: {self.result_type.schema()}
-- Output format is EXTREMELY important. Make sure it's a valid JSON dump of the Pydantic object. Do not include things like
+- Output format is EXTREMELY important. Make sure it's a valid JSON dump of the Pydantic object.
 """
         if isinstance(llm, BaseChatModel):
             messages: List[BaseMessage] = [SystemMessage(content=system_prompt)]
