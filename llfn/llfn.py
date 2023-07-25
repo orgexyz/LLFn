@@ -53,8 +53,8 @@ class LLFnFunc:
                 messages.append(
                     HumanMessage(
                         content=f"""
-Example command: {prompt}
-Expected response: {expected_result}"""
+Example command: {prompt}\n\n
+{expected_result}"""
                     )
                 )
             messages.append(HumanMessage(content=user_prompt))
@@ -62,8 +62,10 @@ Expected response: {expected_result}"""
         elif isinstance(llm, BaseLLM):
             message = f"{system_prompt}\n\n"
             for prompt, expected_result in self.examples:
-                message += f"Example command: {prompt}\n\n{expected_result}\n\n"
-            message += f"User command: {user_prompt}\n\n"
+                message += f"""
+Example command: {prompt}\n\n
+{expected_result}\n\n"""
+            message += f"{user_prompt}"
             output = llm(message)
         else:
             raise ValueError(f"LLM must be either a ChatModel or a BaseLLM")
