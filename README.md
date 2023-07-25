@@ -23,6 +23,9 @@
         <a href="https://github.com/orgexyz/LLFn/blob/master/LICENSE">
           <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" />
         </a>
+        <a href="https://github.com/orgexyz/LLFn/blob/master/CODE_OF_CONDUCT.md">
+          <img src="https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg?style=for-the-badge" />
+        </a>
     </div>
     <br />
     <a href="#core-concept-function-is-all-you-need">Core Concept</a>
@@ -99,7 +102,7 @@ And ... that's it! That's just about everything you need to learn about LLFn to 
 
 <details><summary><b>👆 Click to see the full code</b></summary>
 <p>
-    
+
 ```python
 import os
 from llfn import LLFn
