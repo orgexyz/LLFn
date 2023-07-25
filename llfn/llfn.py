@@ -1,3 +1,4 @@
+import inspect
 from functools import update_wrapper
 from langchain.llms.base import BaseLLM
 from langchain.chat_models.base import BaseChatModel
@@ -7,14 +8,14 @@ from typing import List
 
 
 class LLFnFunc:
-    def __init__(self, app, func):
+    def __init__(self, app, func, return_type):
         self.app = app
         self.func = func
         self.llm = None
         self.examples = []
 
         class Result(BaseModel):
-            result: func.__annotations__["return"] = Field(
+            result: return_type = Field(
                 ..., description="The result of the instruction"
             )
 
@@ -79,5 +80,13 @@ class LLFn:
     def bind(self, llm):
         self.llm = llm
 
-    def __call__(self, func):
-        return LLFnFunc(self, func)
+    def __call__(self, return_type):
+        def wrapper(func):
+            return LLFnFunc(self, func, return_type)
+
+        if inspect.isfunction(return_type):
+            func = return_type
+            return_type = func.__annotations__["return"]
+            return wrapper(func)
+        else:
+            return wrapper

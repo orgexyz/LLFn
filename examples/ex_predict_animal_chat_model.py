@@ -13,8 +13,8 @@ llm = ChatOpenAI(
 )  # type: ignore
 
 
-@function_prompt
-def predict_animal(text: str) -> str:
+@function_prompt(str)
+def predict_animal(text: str):
     return f"What animal fits the following description the best: {text}"
 
 
