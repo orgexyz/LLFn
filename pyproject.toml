@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "llfn"
-version = "0.1.4"
+version = "0.1.5"
 description = "Build anything from a simple text-summarizer to complex AI agents with one common primitive: function"
 authors = [
     "Sorawit Suriyakarn <thepsint@gmail.com>",
