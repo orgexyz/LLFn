@@ -1,20 +1,35 @@
 import inspect
+from typing import Callable, List, Optional, Type, Tuple
 from functools import update_wrapper
+
 from langchain.llms.base import BaseLLM
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage
 from pydantic import BaseModel, Field
-from typing import List
-
-
-prompt = f"""
-To the best of your ability, please convert the following
-
-"""
 
 
 class LLFnFunc:
-    def __init__(self, app, func, return_type):
+    """
+    This class is a wrapper around a user-provided function that is used to generate a prompt.
+    LLFnFunc can be invoked as a function, which in turn invokes the user-provided function and
+    passes the result to the LLM. The result will be parsed and return back to the caller.
+    """
+
+    app: "LLFn"
+    func: Callable[..., str]
+    llm: Optional[BaseLLM]
+    examples: List[Tuple[str, str]]
+    result_type: Type[BaseModel]
+
+    def __init__(self, app: "LLFn", func: Callable[..., str], return_type: type):
+        """
+        Initizalize a new LLFnFunc instance. This is called by the LLFn class.
+
+        Args:
+            app: The LLFn instance that this function is bound to
+            func: The user-provided function that generates a prompt
+            return_type: The type of the return value to parse the LLM output into
+        """
         self.app = app
         self.func = func
         self.llm = None
