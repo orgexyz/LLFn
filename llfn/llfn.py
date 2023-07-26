@@ -7,6 +7,12 @@ from pydantic import BaseModel, Field
 from typing import List
 
 
+prompt = f"""
+To the best of your ability, please convert the following
+
+"""
+
+
 class LLFnFunc:
     def __init__(self, app, func, return_type):
         self.app = app

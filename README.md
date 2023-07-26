@@ -11,6 +11,9 @@
         <a href="https://github.com/orgexyz/LLFn/graphs/contributors">
           <img src="https://img.shields.io/github/contributors/orgexyz/LLFn.svg?style=for-the-badge" />
         </a>
+        <a href="https://pypi.org/project/llfn/">
+          <img src="https://img.shields.io/pypi/dm/llfn?style=for-the-badge" />
+        </a>
         <a href="https://github.com/orgexyz/LLFn/network/members">
           <img src="https://img.shields.io/github/forks/orgexyz/LLFn.svg?style=for-the-badge" />
         </a>
