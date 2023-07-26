@@ -1,11 +1,47 @@
 import inspect
-from typing import Callable, List, Optional, Type, Tuple, Union
+from dataclasses import dataclass
+from typing import Callable, Generic, List, Optional, Type, TypeVar, Union
 from functools import update_wrapper
 
 from langchain.llms.base import BaseLLM
 from langchain.chat_models.base import BaseChatModel
 from langchain.schema import BaseMessage, HumanMessage, SystemMessage, AIMessage
 from pydantic import BaseModel, Field
+
+
+class _ExampleTranslationResult(BaseModel):
+    result_fr: str = Field(..., description="Translation result in French")
+    result_es: str = Field(..., description="Translation result in Spanish")
+    result_cn: str = Field(..., description="Translation result in Chinese")
+
+
+R = TypeVar("R")
+T = TypeVar("T", bound=BaseModel)
+
+
+class Result(BaseModel, Generic[R]):
+    result: R = Field(..., description="The result of the instruction")
+
+
+@dataclass
+class Example(Generic[T]):
+    prompt: str
+    result: T
+
+
+BASIC_EXAMPLE_1 = Example(
+    prompt='Please translate "dog" into different languages',
+    result=_ExampleTranslationResult(
+        result_fr="chien",
+        result_es="perro",
+        result_cn="狗",
+    ),
+)
+
+BASIC_EXAMPLE_2 = Example(
+    prompt="What animal has 4 legs and can bark?",
+    result=Result(result="dog"),
+)
 
 
 def _run_completion(
@@ -52,10 +88,12 @@ class LLFnFunc:
     app: "LLFn"
     func: Callable[..., str]
     llm: Optional[BaseLLM]
-    examples: List[Tuple[str, str]]
+    examples: List[Example]
     result_type: Type[BaseModel]
 
-    def __init__(self, app: "LLFn", func: Callable[..., str], return_type: type):
+    def __init__(
+        self, app: "LLFn", func: Callable[..., str], result_type: Type[BaseModel]
+    ):
         """
         Initizalize a new LLFnFunc instance. This is called by the LLFn class.
 
@@ -67,24 +105,23 @@ class LLFnFunc:
         self.app = app
         self.func = func
         self.llm = None
-        self.examples = []
-
-        class Result(BaseModel):
-            result: return_type = Field(
-                ..., description="The result of the instruction"
-            )
-
-        self.result_type = Result
+        self.examples = [BASIC_EXAMPLE_1, BASIC_EXAMPLE_2]
+        self.result_type = result_type
         update_wrapper(self, func)
 
     def bind(self, llm):
         self.llm = llm
 
     def expect(self, *args, **kwargs):
-        def wrapper(inner_result):
-            prompt = self.func(*args, **kwargs)
-            expected_result = self.result_type(result=inner_result)
-            self.examples.append((prompt, expected_result.json()))
+        def wrapper(expected_result):
+            if not isinstance(expected_result, BaseModel):
+                expected_result = Result(result=expected_result)
+            self.examples.append(
+                Example(
+                    prompt=self.func(*args, **kwargs),
+                    result=expected_result,
+                )
+            )
 
         return wrapper
 
@@ -98,18 +135,27 @@ class LLFnFunc:
                 f'You must call "bind" before calling "{self.func.__name__}"'
             )
         user_prompt = self.func(*args, **kwargs)
-        system_prompt = f"""
+        system_prompt = """
 - You MUST process the user's command and produce exactly one result without any other contexts or explanations
-- Your output must be a JSON dump of a Pydantic object of schema: {self.result_type.schema()}
+- User command always begins with a Pydantic schema. Your output MUST be a JSON dump of a Pydantic object of that schema
 - Output format is EXTREMELY important. Make sure it's a valid JSON dump of the Pydantic object.
 """
         messages: List[BaseMessage] = [SystemMessage(content=system_prompt)]
-        for prompt, expected_result in self.examples:
-            messages.append(HumanMessage(content=prompt))
-            messages.append(AIMessage(content=expected_result))
-        messages.append(HumanMessage(content=user_prompt))
+        for example in self.examples:
+            messages.append(
+                HumanMessage(
+                    content=f"{type(example.result).schema()}\n{example.prompt}"
+                )
+            )
+            messages.append(AIMessage(content=example.result.json()))
+        messages.append(
+            HumanMessage(content=f"{self.result_type.schema()}\n{user_prompt}")
+        )
         output = _run_completion(llm, messages)
-        return self.result_type.parse_raw(output).result
+        result = self.result_type.parse_raw(output)
+        if isinstance(result, Result):
+            result = result.result
+        return result
 
 
 class LLFn:
@@ -121,7 +167,13 @@ class LLFn:
 
     def __call__(self, return_type):
         def wrapper(func):
-            return LLFnFunc(self, func, return_type)
+            return LLFnFunc(
+                self,
+                func,
+                Result[return_type]
+                if not isinstance(return_type, BaseModel)
+                else return_type,
+            )
 
         if inspect.isfunction(return_type):
             func = return_type
