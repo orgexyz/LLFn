@@ -37,6 +37,11 @@ predict_animal.expect("It has four legs and barks")("obviously a dog")
 predict_animal.expect("It has four legs and meows")("obviously a cat")
 
 
+@function_prompt
+def increment_by(v: int, k: int) -> int:
+    return f"What is the result of incrementing {v} by {k}?"
+
+
 def test_predict_animal_annotate_chat_model(chat_model):
     predict_animal.bind(chat_model)
     assert predict_animal("It has two legs and flies") == "obviously a bird"
@@ -45,3 +50,13 @@ def test_predict_animal_annotate_chat_model(chat_model):
 def test_predict_animal_annotate_llm(llm):
     predict_animal.bind(llm)
     assert predict_animal("It has two legs and flies") == "obviously a bird"
+
+
+def test_increment_annotate_chat_model(chat_model):
+    increment_by.bind(chat_model)
+    assert increment_by(10, 2) == 12
+
+
+def test_increment_annotate_llm(llm):
+    increment_by.bind(llm)
+    assert increment_by(100, 20) == 120
