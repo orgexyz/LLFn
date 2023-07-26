@@ -1,6 +1,6 @@
 import inspect
 from dataclasses import dataclass
-from typing import Callable, Generic, List, Optional, Type, TypeVar, Union
+from typing import Callable, Generic, List, Optional, Type, TypeVar, Union, Any
 from functools import update_wrapper
 
 from langchain.llms.base import BaseLLM
@@ -15,12 +15,17 @@ class _ExampleTranslationResult(BaseModel):
     result_cn: str = Field(..., description="Translation result in Chinese")
 
 
-R = TypeVar("R")
+def result_type(result_type: type) -> Type[BaseModel]:
+    class Result(BaseModel):
+        result: result_type = Field(..., description="The result of the instruction")
+
+        def __is_llfn_result(self):
+            return True
+
+    return Result
+
+
 T = TypeVar("T", bound=BaseModel)
-
-
-class Result(BaseModel, Generic[R]):
-    result: R = Field(..., description="The result of the instruction")
 
 
 @dataclass
@@ -40,7 +45,7 @@ BASIC_EXAMPLE_1 = Example(
 
 BASIC_EXAMPLE_2 = Example(
     prompt="What animal has 4 legs and can bark?",
-    result=Result(result="dog"),
+    result=result_type(str)(result="dog"),
 )
 
 
@@ -92,7 +97,10 @@ class LLFnFunc:
     result_type: Type[BaseModel]
 
     def __init__(
-        self, app: "LLFn", func: Callable[..., str], result_type: Type[BaseModel]
+        self,
+        app: "LLFn",
+        func: Callable[..., str],
+        result_type: Type[BaseModel],
     ):
         """
         Initizalize a new LLFnFunc instance. This is called by the LLFn class.
@@ -105,7 +113,7 @@ class LLFnFunc:
         self.app = app
         self.func = func
         self.llm = None
-        self.examples = [BASIC_EXAMPLE_1, BASIC_EXAMPLE_2]
+        self.examples = []
         self.result_type = result_type
         update_wrapper(self, func)
 
@@ -115,7 +123,7 @@ class LLFnFunc:
     def expect(self, *args, **kwargs):
         def wrapper(expected_result):
             if not isinstance(expected_result, BaseModel):
-                expected_result = Result(result=expected_result)
+                expected_result = self.result_type(result=expected_result)
             self.examples.append(
                 Example(
                     prompt=self.func(*args, **kwargs),
@@ -141,7 +149,7 @@ class LLFnFunc:
 - Output format is EXTREMELY important. Make sure it's a valid JSON dump of the Pydantic object.
 """
         messages: List[BaseMessage] = [SystemMessage(content=system_prompt)]
-        for example in self.examples:
+        for example in self.examples or [BASIC_EXAMPLE_1, BASIC_EXAMPLE_2]:
             messages.append(
                 HumanMessage(
                     content=f"{type(example.result).schema()}\n{example.prompt}"
@@ -153,31 +161,32 @@ class LLFnFunc:
         )
         output = _run_completion(llm, messages)
         result = self.result_type.parse_raw(output)
-        if isinstance(result, Result):
+        if hasattr(result, "result"):
+            # FIXME: This is a hack to make the result of the function call
             result = result.result
         return result
 
 
 class LLFn:
-    def __init__(self):
-        self.llm = None
+    llm: Optional[Union[BaseChatModel, BaseLLM]]
 
-    def bind(self, llm):
+    def __init__(self, llm: Optional[Union[BaseChatModel, BaseLLM]] = None):
         self.llm = llm
 
-    def __call__(self, return_type):
-        def wrapper(func):
-            return LLFnFunc(
-                self,
-                func,
-                Result[return_type]
-                if not isinstance(return_type, BaseModel)
-                else return_type,
-            )
+    def bind(self, llm: Union[BaseChatModel, BaseLLM]):
+        self.llm = llm
 
-        if inspect.isfunction(return_type):
-            func = return_type
-            return_type = func.__annotations__["return"]
-            return wrapper(func)
-        else:
-            return wrapper
+    def __call__(self, arg: Union[type, Callable]) -> Any:
+        return_type: Type[BaseModel]
+
+        def wrap(func: Callable):
+            return LLFnFunc(self, func, return_type)
+
+        if inspect.isfunction(arg):
+            r = arg.__annotations__["return"]
+            return_type = result_type(r) if not isinstance(arg, BaseModel) else r
+            return wrap(arg)
+        if isinstance(arg, type):
+            return_type = result_type(arg) if not isinstance(arg, BaseModel) else arg
+            return wrap
+        raise ValueError(f"Invalid argument type: {type(arg)}")

@@ -1,6 +1,7 @@
 import os
 
 import pytest
+from pydantic import BaseModel, Field
 from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 
@@ -28,20 +29,24 @@ def llm():
 function_prompt = LLFn()
 
 
-@function_prompt
-def predict_animal(text: str) -> str:
+class AnimalResult(BaseModel):
+    animal: str = Field(..., description="The animal that fits the question")
+
+
+@function_prompt(AnimalResult)
+def predict_animal(text: str):
     return f"What animal fits the following description the best: {text}"
 
 
-predict_animal.expect("It has four legs and barks")("obviously a dog")
-predict_animal.expect("It has four legs and meows")("obviously a cat")
+predict_animal.expect("It has four legs and barks")(AnimalResult(animal="dog"))
+predict_animal.expect("It has four legs and meows")(AnimalResult(animal="cat"))
 
 
-def test_predict_animal_chat_model(chat_model):
+def test_predict_animal_argument_chat_model(chat_model):
     predict_animal.bind(chat_model)
-    assert predict_animal("It has two legs and flies") == "obviously a bird"
+    assert predict_animal("It has two legs and flies") == AnimalResult(animal="bird")
 
 
-def test_predict_animal_llm(llm):
+def test_predict_animal_argument_llm(llm):
     predict_animal.bind(llm)
-    assert predict_animal("It has two legs and flies") == "obviously a bird"
+    assert predict_animal("It has two legs and flies") == AnimalResult(animal="bird")
