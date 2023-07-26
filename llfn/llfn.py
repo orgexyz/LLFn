@@ -19,7 +19,7 @@ def result_type(result_type: type) -> Type[BaseModel]:
     class Result(BaseModel):
         result: result_type = Field(..., description="The result of the instruction")
 
-        def __is_llfn_result(self):
+        def _is_llfn_result(self):
             return True
 
     return Result
@@ -161,8 +161,7 @@ class LLFnFunc:
         )
         output = _run_completion(llm, messages)
         result = self.result_type.parse_raw(output)
-        if hasattr(result, "result"):
-            # FIXME: This is a hack to make the result of the function call
+        if hasattr(result, "_is_llfn_result"):
             result = result.result
         return result
 
