@@ -121,15 +121,12 @@ class LLFnFunc:
         self.llm = llm
 
     def expect(self, *args, **kwargs):
-        def wrapper(expected_result):
-            if not isinstance(expected_result, BaseModel):
-                expected_result = self.result_type(result=expected_result)
-            self.examples.append(
-                Example(
-                    prompt=self.func(*args, **kwargs),
-                    result=expected_result,
-                )
-            )
+        prompt = self.func(*args, **kwargs)
+
+        def wrapper(result):
+            if not isinstance(result, BaseModel):
+                result = self.result_type(result=result)
+            self.examples.append(Example(prompt=prompt, result=result))
 
         return wrapper
 
@@ -186,6 +183,7 @@ class LLFn:
             return_type = result_type(r) if not isinstance(arg, BaseModel) else r
             return wrap(arg)
         if isinstance(arg, type):
-            return_type = result_type(arg) if not isinstance(arg, BaseModel) else arg
+            r = arg
+            return_type = result_type(r) if not isinstance(arg, BaseModel) else r
             return wrap
         raise ValueError(f"Invalid argument type: {type(arg)}")
