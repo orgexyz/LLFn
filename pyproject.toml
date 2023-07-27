@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "llfn"
-version = "0.1.6"
+version = "0.1.7"
 description = "Build anything from a simple text-summarizer to complex AI agents with one common primitive: function"
 authors = [
     "Sorawit Suriyakarn <thepsint@gmail.com>",
@@ -10,7 +10,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
-langchain = ">=0.0.235"
+langchain = ">=0.0.1"
 openai = ">=0.27.0"
 
 [tool.poetry.group.dev.dependencies]
