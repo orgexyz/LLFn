@@ -167,12 +167,19 @@ class LLFn:
     llm: Optional[Union[BaseChatModel, BaseLLM]]
 
     def __init__(self, llm: Optional[Union[BaseChatModel, BaseLLM]] = None):
+        """Initialize a new LLFn instance.
+
+        Args:
+            llm: The LLM to bind to this LLFn instance. Optional.
+        """
         self.llm = llm
 
     def bind(self, llm: Union[BaseChatModel, BaseLLM]):
+        """Bind an LLM to this LLFn instance, which will be used to run the function."""
         self.llm = llm
 
     def __call__(self, arg: Union[type, Callable]) -> Any:
+        """Main entrypoint for LLFn. Called when the user decorates a function with LLFn."""
         return_type: Type[BaseModel]
 
         def wrap(func: Callable):
