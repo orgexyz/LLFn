@@ -186,6 +186,10 @@ class LLFn:
             return LLFnFunc(self, func, return_type)
 
         if inspect.isfunction(arg):
+            if arg.__annotations__.get("return") is None:
+                raise ValueError(
+                    f"Function {arg.__name__} must have a return type annotation"
+                )
             r = arg.__annotations__["return"]
             return_type = result_type(r) if not isinstance(arg, BaseModel) else r
             return wrap(arg)
