@@ -12,7 +12,7 @@
           <img src="https://img.shields.io/github/contributors/orgexyz/LLFn.svg?style=for-the-badge" />
         </a>
         <a href="https://discord.gg/zNrYc6QbPK">
-          <img src="https://img.shields.io/discord/1135150004286271548?style=for-the-badge" />
+          <img src="https://img.shields.io/discord/1135150004286271548?style=for-the-badge&logo=discord&label=DISCORD" />
         </a>
         <a href="https://pypi.org/project/llfn/">
           <img src="https://img.shields.io/pypi/dm/llfn?style=for-the-badge" />
