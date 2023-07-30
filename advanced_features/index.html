@@ -1,0 +1,563 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../core_concept/">
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>Advanced Features - LLFn</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#structured-function-output" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="LLFn" class="md-header__button md-logo" aria-label="LLFn" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            LLFn
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Advanced Features
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="LLFn" class="md-nav__button md-logo" aria-label="LLFn" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    LLFn
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Welcome to LLFn
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Advanced Features
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Advanced Features
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#structured-function-output" class="md-nav__link">
+    📐 Structured Function Output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binding-and-overriding-llms" class="md-nav__link">
+    🗝️ Binding and Overriding LLMs
+  </a>
+  
+    <nav class="md-nav" aria-label="🗝️ Binding and Overriding LLMs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#method-1-binding-llm-to-all-your-functions" class="md-nav__link">
+    Method 1: Binding LLM to All Your Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-2-bindingoverriding-llm-to-a-specific-function" class="md-nav__link">
+    Method 2: Binding/Overriding LLM to A Specific Function
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#callbacks-and-streaming" class="md-nav__link">
+    🏄‍♂️ Callbacks and Streaming
+  </a>
+  
+    <nav class="md-nav" aria-label="🏄‍♂️ Callbacks and Streaming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#callbacks" class="md-nav__link">
+    Callbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streaming-llm-output" class="md-nav__link">
+    Streaming LLM Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../core_concept/" class="md-nav__link">
+        Core Concept
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../features/" class="md-nav__link">
+        Features
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#structured-function-output" class="md-nav__link">
+    📐 Structured Function Output
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#binding-and-overriding-llms" class="md-nav__link">
+    🗝️ Binding and Overriding LLMs
+  </a>
+  
+    <nav class="md-nav" aria-label="🗝️ Binding and Overriding LLMs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#method-1-binding-llm-to-all-your-functions" class="md-nav__link">
+    Method 1: Binding LLM to All Your Functions
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-2-bindingoverriding-llm-to-a-specific-function" class="md-nav__link">
+    Method 2: Binding/Overriding LLM to A Specific Function
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#callbacks-and-streaming" class="md-nav__link">
+    🏄‍♂️ Callbacks and Streaming
+  </a>
+  
+    <nav class="md-nav" aria-label="🏄‍♂️ Callbacks and Streaming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#callbacks" class="md-nav__link">
+    Callbacks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#streaming-llm-output" class="md-nav__link">
+    Streaming LLM Output
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>Advanced Features</h1>
+
+<p>While LLFn is simple and light-weight by design, it does pack some punches above its weight that helps you write AI applications more intuitively.</p>
+<h3 id="structured-function-output">📐 Structured Function Output</h3>
+<p>You can create a function to automatically format the response into a desired <code>pydantic</code> object. To do this, you simply declare the output of your function in <code>pydantic</code>, and let the LLFn do the heavy lifting for you.</p>
+<pre><code class="language-python">from pydantic import BaseModel, Field
+
+class AgentLogicOutput(BaseModel):
+  tasks: List[str] = Field(..., description=&quot;list of tasks to accomplish the given goal&quot;)
+  reasoning: str  = Field(..., description=&quot;why you choose to do these tasks&quot;)
+
+@function_prompt
+def agent_think(goal: str) -&gt; AgentLogicOutput:
+    return f&quot;You're an agent planning 5 tasks to accomplish the following goal: {goal}&quot;
+
+agent_think(&quot;Creating online business&quot;) # this returns AgentLogicOutput object
+</code></pre>
+<p>This allows for powerful composability like tools, agents, etc. without sacrificing the simplicity and verbosity of our program. Under the hood LLFn injects the output format into your prompt and automatically parse the LLM result into the specified format.</p>
+<h3 id="binding-and-overriding-llms">🗝️ Binding and Overriding LLMs</h3>
+<p>LLFn let you use both LangChain's <a href="https://python.langchain.com/docs/modules/model_io/models/llms/">LLMs</a> and <a href="https://python.langchain.com/docs/modules/model_io/models/chat/">Chat Models</a> to power your functions. There are 2 ways to <em>assign</em> it.</p>
+<h4 id="method-1-binding-llm-to-all-your-functions">Method 1: Binding LLM to All Your Functions</h4>
+<p>This is the most convenient way to just get your function to work.</p>
+<pre><code class="language-python">from llfn import LLFn
+from langchain.chat_models import ChatOpenAI
+
+llm = ChatOpenAI(temperature=0.7, openai_api_key=API_KEY)
+
+function_prompt = LLFn()
+function_prompt.bind(llm)
+
+@function_prompt
+def your_function(...):
+    ...
+</code></pre>
+<h4 id="method-2-bindingoverriding-llm-to-a-specific-function">Method 2: Binding/Overriding LLM to A Specific Function</h4>
+<p>If you want to use different LLMs for different tasks, you can do so by binding <code>llm</code> to your function individually.</p>
+<pre><code class="language-python">from langchain.llms import LlamaCpp
+
+llm2 = LlamaCpp(...)
+
+your_function.bind(llm2) # This will override the LLM for this function
+</code></pre>
+<h3 id="callbacks-and-streaming">🏄‍♂️ Callbacks and Streaming</h3>
+<h4 id="callbacks">Callbacks</h4>
+<p>With LLFn, it's trivial to define callbacks in between execution. Because everything is a function, you can <code>print</code> or call any 3rd party APIs anywhere you want.</p>
+<p>For example, if you want to print results of executions in between a series of complex AI agent it would look like this.</p>
+<pre><code class="language-python">...
+
+# Assuming that other functions are already defined with function_prompt
+@function_prompt
+def agent_plan_and_execute(goal: str) -&gt; str:
+    tasks = agent_think(goal)
+    print(tasks) # Debug
+    results = agent_execute_tasks(tasks)
+    print(results) # Debug
+    evaluation = agent_evaluate_perf(goal, results)
+    print(evaluation) # Debug
+</code></pre>
+<p>Your function can also take a callback function as a parameter. LLFn does not dictate how you should do it. Anything that works for you would do!</p>
+<h4 id="streaming-llm-output">Streaming LLM Output</h4>
+<p>Because LLFn leverages LangChain's LLMs, you can use <a href="https://python.langchain.com/docs/modules/model_io/models/chat/how_to/streaming">LangChain Streaming</a> directly.</p>
+<pre><code class="language-python">from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+
+llm = ChatOpenAI(
+    streaming=True,
+    callbacks=[StreamingStdOutCallbackHandler()],
+    ...
+)
+
+function_prompt.bind(llm)
+</code></pre>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": [], "search": "../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+    
+  </body>
+</html>
